@@ -14,14 +14,14 @@ clc;
 
 c_min = 1200;           % 介质最小声速 [m/s]，用于确定最大网格尺寸
 points_per_length = 3;  % 每波长网格点数（非均匀介质建议≥3）
-f = 1e6;                % 超声中心频率 [Hz]
+f = 2.5e6;                % 超声中心频率 [Hz]
 diameter = 0.15;        % 成像区域直径 [m] = 150mm
 
 % 计算网格步长：dx = c_min / (points_per_length * f)
 % 确保一个波长内至少有points_per_length个网格点
 FW_dx = c_min / (points_per_length * f);
 Fw_Nx = round(diameter / FW_dx);  % 理论网格数
-FW_N = 410;                        % 实际使用网格数（选择2或3的倍数便于计算）
+FW_N = 960;                        % 实际使用网格数（选择2或3的倍数便于计算）
 
 % 初始化k-wave网格对象
 % kWaveGrid自动计算时间步长dt，满足CFL稳定性条件
