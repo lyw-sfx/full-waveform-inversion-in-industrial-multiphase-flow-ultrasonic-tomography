@@ -572,40 +572,6 @@ end
 
 %% ==================== 结果显示 ====================
 
-%% 损失函数收敛曲线
-figure('Name', '损失函数收敛曲线', 'Position', [100, 100, 1200, 400]);
-
-subplot(1, 4, 1);
-plot(1:num_iter, loss_history(1:num_iter), 'b-o', 'LineWidth', 2);
-xlabel('迭代次数');
-ylabel('总损失');
-title('总损失函数');
-grid on;
-
-subplot(1, 4, 2);
-plot(1:num_iter, data_fidelity_history(1:num_iter), 'r-s', 'LineWidth', 2);
-xlabel('迭代次数');
-ylabel('数据保真度');
-title('数据保真度项');
-grid on;
-
-subplot(1, 4, 3);
-plot(1:num_iter, tv_reg_speed_history(1:num_iter), 'g-^', 'LineWidth', 2);
-hold on;
-plot(1:num_iter, tv_reg_alpha_history(1:num_iter), 'm-v', 'LineWidth', 2);
-xlabel('迭代次数');
-ylabel('TV正则');
-title('TV正则项');
-legend('声速', '衰减');
-grid on;
-
-subplot(1, 4, 4);
-plot(1:num_iter, joint_reg_history(1:num_iter), 'c-d', 'LineWidth', 2);
-xlabel('迭代次数');
-ylabel('联合正则');
-title('联合正则项');
-grid on;
-
 %% 最终重建结果
 figure('Name', '最终重建结果', 'Position', [100, 100, 1000, 400]);
 
@@ -623,79 +589,6 @@ title('衰减系数重建结果');
 colorbar;
 colormap(jet);
 axis image;
-
-%% 与真实值对比
-figure('Name', '声速对比', 'Position', [100, 100, 1200, 300]);
-
-subplot(1, 3, 1);
-imagesc(medium_oil.sound_speed(sa_index:INV_N-sa_index, sa_index:INV_N-sa_index));
-title('真实声速');
-colorbar;
-colormap(jet);
-axis image;
-clim([c_min_limit, c_max_limit]);
-
-subplot(1, 3, 2);
-imagesc(medium_rec.sound_speed(sa_index:INV_N-sa_index, sa_index:INV_N-sa_index));
-title('重建声速');
-colorbar;
-colormap(jet);
-axis image;
-clim([c_min_limit, c_max_limit]);
-
-subplot(1, 3, 3);
-speed_error = medium_rec.sound_speed(sa_index:INV_N-sa_index, sa_index:INV_N-sa_index) - ...
-              medium_oil.sound_speed(sa_index:INV_N-sa_index, sa_index:INV_N-sa_index);
-imagesc(speed_error);
-title('声速误差');
-colorbar;
-colormap(jet);
-axis image;
-
-% 计算声速重建质量指标
-speed_rmse = sqrt(mean(speed_error(:).^2));
-speed_mae = mean(abs(speed_error(:)));
-speed_maxe = max(abs(speed_error(:)));
-fprintf('\n声速重建误差:\n');
-fprintf('  RMSE: %.2f m/s\n', speed_rmse);
-fprintf('  MAE:  %.2f m/s\n', speed_mae);
-fprintf('  MaxE: %.2f m/s\n', speed_maxe);
-
-figure('Name', '衰减系数对比', 'Position', [100, 100, 1200, 300]);
-
-subplot(1, 3, 1);
-imagesc(medium_oil.alpha_coeff(sa_index:INV_N-sa_index, sa_index:INV_N-sa_index));
-title('真实衰减系数');
-colorbar;
-colormap(jet);
-axis image;
-
-subplot(1, 3, 2);
-imagesc(medium_rec.alpha_coeff(sa_index:INV_N-sa_index, sa_index:INV_N-sa_index));
-title('重建衰减系数');
-colorbar;
-colormap(jet);
-axis image;
-
-subplot(1, 3, 3);
-alpha_error = medium_rec.alpha_coeff(sa_index:INV_N-sa_index, sa_index:INV_N-sa_index) - ...
-              medium_oil.alpha_coeff(sa_index:INV_N-sa_index, sa_index:INV_N-sa_index);
-imagesc(alpha_error);
-title('衰减系数误差');
-colorbar;
-colormap(jet);
-axis image;
-
-% 计算衰减系数重建质量指标
-alpha_rmse = sqrt(mean(alpha_error(:).^2));
-alpha_mae = mean(abs(alpha_error(:)));
-alpha_maxe = max(abs(alpha_error(:)));
-fprintf('\n衰减系数重建误差:\n');
-fprintf('  RMSE: %.4e\n', alpha_rmse);
-fprintf('  MAE:  %.4e\n', alpha_mae);
-fprintf('  MaxE: %.4e\n', alpha_maxe);
-
-fprintf('\n========== FWI联合重构完成 ==========\n');
 
 %% ==================== 辅助函数 ====================
 
