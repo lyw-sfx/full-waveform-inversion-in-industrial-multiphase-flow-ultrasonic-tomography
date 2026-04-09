@@ -167,7 +167,7 @@ medium_rec.alpha_power = 1.43;
 % 定义需要记录全场声压的区域（用于伴随法梯度计算）
 
 sensor_allfield = zeros(INV_N, INV_N);
-sa_index = round(INV_N/4) + 1;  % 重建区域边界索引
+sa_index = round(INV_N/6) + 1;  % 重建区域边界索引
 % 重建区域为内部区域（排除PML边界）
 sensor_allfield(sa_index:INV_N-sa_index, sa_index:INV_N-sa_index) = true;
 
@@ -410,7 +410,7 @@ while num_iter < max_iter
         alpha_field_vector = alpha_field_matrix(:);
         
         for i = 1:row_forward_data_1
-            grad_alpha_temp = sum(cumtrapz(forward_data_1(i,:)) .* adjoint_data(i,:));
+            grad_alpha_temp = sum(forward_data_1(i,:) .* adjoint_data(i,:));
             grad_alpha(i) = grad_alpha_temp + grad_alpha(i);
         end
     end
